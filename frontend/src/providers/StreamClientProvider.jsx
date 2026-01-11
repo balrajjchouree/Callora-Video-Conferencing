@@ -1,4 +1,4 @@
-import { useUser } from "@clerk/clerk-react";
+import { useAuth, useUser } from "@clerk/clerk-react";
 import { StreamVideo, StreamVideoClient } from "@stream-io/video-react-sdk";
 import { Loader } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -11,6 +11,7 @@ const StreamVideoProvider = ({ children }) => {
   const [videoClient, setVideoClient] = useState(null);
 
   const { user, isLoaded } = useUser();
+  const { getToken } = useAuth();
 
   useEffect(() => {
     if (!isLoaded || !user) return;
@@ -27,7 +28,9 @@ const StreamVideoProvider = ({ children }) => {
         const res = await fetch(
           `${import.meta.env.VITE_PUBLIC_SERVER_URL}/api/stream/token`,
           {
-            credentials: "include",
+            headers: {
+              Authorization: `Bearer ${await getToken()}`,
+            },
           }
         );
         const data = await res.json();

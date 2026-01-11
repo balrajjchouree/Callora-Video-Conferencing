@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useUser } from "@clerk/clerk-react";
+import { useAuth, useUser } from "@clerk/clerk-react";
 import { StreamChat } from "stream-chat";
 import { Chat } from "stream-chat-react";
 import "stream-chat-react/dist/css/v2/index.css";
@@ -10,6 +10,7 @@ const chatClient = StreamChat.getInstance(apiKey);
 
 const StreamChatProvider = ({ children }) => {
   const { user, isLoaded } = useUser();
+  const {getToken} = useAuth();
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
@@ -18,9 +19,11 @@ const StreamChatProvider = ({ children }) => {
     const connect = async () => {
       const res = await fetch(
         `${import.meta.env.VITE_PUBLIC_SERVER_URL}/api/chat/token`,
-        {
-          credentials: "include",
-        }
+          {
+            headers: {
+              Authorization: `Bearer ${await getToken()}`
+            },
+          }
       );
 
       const data = await res.json();

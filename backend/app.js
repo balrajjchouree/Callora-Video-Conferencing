@@ -11,7 +11,7 @@ const app = express();
 app.set("trust proxy", 1);
 
 const clienturl = process.env.CLIENT_URL;
-console.log(clienturl)
+console.log(clienturl);
 
 app.use(
   cors({
@@ -20,6 +20,14 @@ app.use(
   })
 );
 app.use(express.json());
+
+app.get("/", (req, res) => {
+  res.send("Backend is running");
+});
+
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "ok" });
+});
 
 app.use("/api/stream", streamRoutes);
 
