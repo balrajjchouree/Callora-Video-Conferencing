@@ -8,7 +8,10 @@ import chatRoutes from "./routes/chat.action.js";
 
 const app = express();
 
+app.set("trust proxy", 1);
+
 const clienturl = process.env.CLIENT_URL;
+console.log(clienturl)
 
 app.use(
   cors({
