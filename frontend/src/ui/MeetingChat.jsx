@@ -42,7 +42,7 @@ function MeetingChat({ meetingId, onClose }) {
 
   if (!ready) {
     return (
-      <CalloraLoader label="Connecting Chat..." size="8" />
+      <CalloraLoader label="Connecting Chat..."/>
     );
   }
 
