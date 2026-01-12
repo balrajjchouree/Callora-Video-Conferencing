@@ -36,15 +36,21 @@ router.post("/channel", requireAuth(), async (req, res) => {
     const { meetingId } = req.body;
     const { userId } = req.auth();
 
+    if (!meetingId) {
+      return res.status(400).json({ error: "meetingId required" });
+    }
+
     const channel = chatClient.channel("messaging", meetingId, {
-      name: "Meeting Chat",
       created_by_id: userId,
       custom: {
         chatLocked: false,
       },
     });
 
-    await channel.create();
+    await channel.create().catch((err) => {
+      if (err.code !== 4) throw err;
+    });
+
     await channel.addMembers([userId]);
 
     res.json({ success: true });

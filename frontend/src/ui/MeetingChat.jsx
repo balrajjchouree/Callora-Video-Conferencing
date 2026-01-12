@@ -1,3 +1,4 @@
+import { useAuth } from "@clerk/clerk-react";
 import { X } from "lucide-react";
 import { useEffect, useState } from "react";
 import {
@@ -11,18 +12,26 @@ import {
 
 function MeetingChat({ meetingId, onClose }) {
   const { client } = useChatContext();
+  const { getToken } = useAuth();
   const [ready, setReady] = useState(false);
 
   const channel = client.channel("messaging", meetingId);
 
   useEffect(() => {
+    if (!meetingId) return;
+
     const joinChannel = async () => {
-      await fetch(`${import.meta.env.VITE_PUBLIC_SERVER_URL}/api/chat/channel`, {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ meetingId }),
-      });
+      await fetch(
+        `${import.meta.env.VITE_PUBLIC_SERVER_URL}/api/chat/channel`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${await getToken()}`,
+          },
+          body: JSON.stringify({ meetingId }),
+        }
+      );
 
       setReady(true);
     };
@@ -30,12 +39,14 @@ function MeetingChat({ meetingId, onClose }) {
     joinChannel();
   }, [meetingId]);
 
-  if (!ready) return null;
+  if (!ready) {
+    return (
+      <CalloraLoader fullScreen="false" label="Connecting Chat..." size="8" />
+    );
+  }
 
   return (
-    <div
-      className="h-full px-4 py-6 sm:h-[85vh] flex flex-col show-scrollbar fixed sm:relative inset-0 sm:inset-auto z-50 sm:z-auto"
-    >
+    <div className="h-full px-4 py-6 sm:h-[85vh] flex flex-col show-scrollbar fixed sm:relative inset-0 sm:inset-auto z-50 sm:z-auto">
       <Channel channel={channel}>
         <Window>
           {onClose && (
@@ -48,7 +59,7 @@ function MeetingChat({ meetingId, onClose }) {
           )}
           <ChannelHeader />
           <MessageList />
-          <MessageInput audioRecordingEnabled  emojiPicker />
+          <MessageInput audioRecordingEnabled emojiPicker />
         </Window>
       </Channel>
     </div>
