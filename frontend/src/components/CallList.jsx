@@ -99,7 +99,7 @@ function CallList({ type }) {
             buttonText={type === "recordings" ? "Play" : "Start"}
             handleClick={
               type === "recordings"
-                ? () => window.open(meeting.url, "_blank")
+                ? () => window.open(meeting.url)
                 : () => navigate(`/meeting/${meeting.id}`)
             }
             link={

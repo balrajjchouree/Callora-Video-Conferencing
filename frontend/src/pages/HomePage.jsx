@@ -208,7 +208,7 @@ function HomePage() {
             toast.error("Please enter a meeting link");
             return;
           }
-          window.open(values.link, "_blank");
+          window.open(values.link);
         }}
       >
         <input
