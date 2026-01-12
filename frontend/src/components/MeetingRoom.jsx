@@ -19,7 +19,7 @@ import CalloraLoader from "../ui/CalloraLoader";
 function MeetingRoom() {
   const [searchParams] = useSearchParams();
   const isPersonalRoom = searchParams.get("personal") === "true";
-  const [layout, setLayout] = useState("grid");
+  const [layout, setLayout] = useState("speaker-right");
   const [showParticipants, setShowParticipants] = useState(false);
   const [showLayoutMenu, setShowLayoutMenu] = useState(false);
 

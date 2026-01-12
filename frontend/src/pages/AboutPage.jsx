@@ -81,7 +81,7 @@ function AboutPage() {
               </a>
 
               <a
-                href="https://balraj-s-portfolio.onrender.com/"
+                href="https://balrajjchouree.elevenai.in/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 text-orange-400 hover:text-orange-300 transition text-sm font-medium"
