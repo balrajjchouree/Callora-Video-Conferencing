@@ -54,7 +54,7 @@ const StreamChatProvider = ({ children }) => {
   }, [user, isLoaded]);
 
   if (!ready) {
-    return <CalloraLoader fullScreen="false" label="Connecting Chat..." size="8" />
+    return <CalloraLoader label="Connecting Chat..." size="8" />
   }
 
   return (

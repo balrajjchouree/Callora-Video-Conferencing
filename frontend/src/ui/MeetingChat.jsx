@@ -9,6 +9,7 @@ import {
   Window,
   useChatContext,
 } from "stream-chat-react";
+import CalloraLoader from "./CalloraLoader";
 
 function MeetingChat({ meetingId, onClose }) {
   const { client } = useChatContext();
@@ -41,7 +42,7 @@ function MeetingChat({ meetingId, onClose }) {
 
   if (!ready) {
     return (
-      <CalloraLoader fullScreen="false" label="Connecting Chat..." size="8" />
+      <CalloraLoader label="Connecting Chat..." size="8" />
     );
   }
 

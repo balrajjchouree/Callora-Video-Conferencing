@@ -33,9 +33,7 @@ function App() {
           element={
             <ProtectedRoute>
               <StreamVideoProvider>
-                <StreamChatProvider>
                   <MainLayout />
-                </StreamChatProvider>
               </StreamVideoProvider>
             </ProtectedRoute>
           }
