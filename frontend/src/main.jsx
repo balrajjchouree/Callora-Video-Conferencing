@@ -6,12 +6,24 @@ import { BrowserRouter } from "react-router-dom";
 import { ClerkProvider } from "@clerk/clerk-react";
 import { dark } from "@clerk/themes";
 import { AppLoadingProvider } from "./context/AppLoadingContext.jsx";
+import { registerSW } from "virtual:pwa-register";
+
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
 if (!PUBLISHABLE_KEY) {
   throw new Error("Missing Publishable Key");
 }
+
+registerSW({
+  onNeedRefresh() {
+    console.log("New version available");
+  },
+  onOfflineReady() {
+    console.log("Callora is ready offline");
+  },
+});
+
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>

@@ -24,7 +24,8 @@
     "react-toastify": "^11.0.5",
     "stream-chat": "^9.28.0",
     "stream-chat-react": "^13.13.1",
-    "tailwindcss": "^4.1.13"
+    "tailwindcss": "^4.1.13",
+    "vite-plugin-pwa": "^1.2.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
