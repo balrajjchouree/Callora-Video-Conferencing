@@ -3,6 +3,8 @@ import { toast } from "react-toastify";
 import { useUser } from "@clerk/clerk-react";
 import { useGetCallById } from "../hooks/useGetCallById";
 import { useStreamVideoClient } from "@stream-io/video-react-sdk";
+import { useState } from "react";
+import CalloraLoader from "../ui/CalloraLoader";
 
 const Table = ({ title, description }) => {
   return (
@@ -25,20 +27,32 @@ const PersonalRoomPage = () => {
   const { call } = useGetCallById(meetingId);
   const navigate = useNavigate();
 
+  const [isStarting, setIsStarting] = useState(false);
+
   const startRoom = async () => {
+    if (isStarting) return;
     if (!client || !user || !meetingId) return;
 
-    const newCall = client.call("default", meetingId);
+    try {
+      setIsStarting(true);
 
-    if (!call) {
-      await newCall.getOrCreate({
-        data: {
-          starts_at: new Date().toISOString(),
-        },
-      });
+      const newCall = client.call("default", meetingId);
+
+      if (!call) {
+        await newCall.getOrCreate({
+          data: {
+            starts_at: new Date().toISOString(),
+          },
+        });
+      }
+
+      navigate(`/meeting/${meetingId}?personal=true`);
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to start meeting");
+    } finally {
+      setIsStarting(false);
     }
-
-    navigate(`/meeting/${meetingId}?personal=true`);
   };
 
   const meetingLink = `${
@@ -47,7 +61,6 @@ const PersonalRoomPage = () => {
 
   return (
     <section className="w-full max-w-7xl text-white space-y-8 sm:space-y-10">
-      {/* Header */}
       <div className="space-y-2 text-center xl:text-start">
         <h1 className="text-4xl font-bold tracking-tight">Personal Room</h1>
         <p className="text-gray-400 text-sm md:text-base">
@@ -67,8 +80,13 @@ const PersonalRoomPage = () => {
         <button
           className="rounded-lg bg-blue-600 px-6 py-3 font-medium hover:bg-blue-700 transition cursor-pointer"
           onClick={startRoom}
+          disabled={isStarting}
         >
-          Start Meeting
+          {isStarting ? (
+            <CalloraLoader size="4" fullScreen={false} label="" />
+          ) : (
+            "Start Meeting"
+          )}
         </button>
 
         <button

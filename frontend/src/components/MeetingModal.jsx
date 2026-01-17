@@ -19,12 +19,15 @@ function MeetingModal({
 
   if (!isOpen) return null;
 
-  const onButtonClick = () => {
+  const onButtonClick = async () => {
     if (isLoading) return;
 
-    setIsLoading(true);
-    handleClick?.();
-    setIsLoading(false);
+    try {
+      setIsLoading(true);
+      await handleClick?.();
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
